@@ -1,67 +1,74 @@
-﻿namespace CharacterConsole;
-
-public class CharacterManager
-{
-    private readonly IInput _input;
-    private readonly IOutput _output;
-    private readonly string _filePath = "input.csv";
-
-    private string[] lines;
-
-    public CharacterManager(IInput input, IOutput output)
+﻿using System;
+using System.IO;
+using System.Reflection.Emit;
+using System.Xml.Linq;
+namespace CharacterConsole
+{ 
+    public class CharacterManager
     {
-        _input = input;
-        _output = output;
-    }
-
-    public void Run()
-    {
-        _output.WriteLine("Welcome to Character Management");
-
-        lines = File.ReadAllLines(_filePath);
-
-        while (true)
+        string[] lines;
+        public void Run()
         {
-            _output.WriteLine("Menu:");
-            _output.WriteLine("1. Display Characters");
-            _output.WriteLine("2. Add Character");
-            _output.WriteLine("3. Level Up Character");
-            _output.WriteLine("4. Exit");
-            _output.Write("Enter your choice: ");
-            var choice = _input.ReadLine();
+            Console.WriteLine("Welcome to Character Management");
 
-            switch (choice)
+            lines = File.ReadAllLines("input.csv");
+
+            while (true)
             {
-                case "1":
-                    DisplayCharacters();
-                    break;
-                case "2":
-                    AddCharacter();
-                    break;
-                case "3":
-                    LevelUpCharacter();
-                    break;
-                case "4":
-                    return;
-                default:
-                    _output.WriteLine("Invalid choice. Please try again.");
-                    break;
+                Console.WriteLine("\nMenu:");
+                Console.WriteLine("1. Display Characters");
+                Console.WriteLine("2. Find Character");
+                Console .WriteLine("3. Add Character");
+                Console.WriteLine("4. Level Up Character");
+                Console.WriteLine("5. Exit");
+                Console.Write("Enter your choice: ");
+                var choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        DisplayCharacters();
+                        break;
+                    case "2":
+                        FindCharacter();
+                        break;
+                    case "3":
+                        AddCharacter();
+                        break;
+                    case "4":
+                        LevelUpCharacter();
+                        break;
+                    case "5":
+                        return;
+                    default:
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        break;
+                }
             }
         }
-    }
 
-    public void DisplayCharacters()
-    {
-        // TODO: Implement displaying characters from the CSV file
-    }
+        void DisplayCharacters()
+        {
+            CharacterReader characterReader = new CharacterReader();
+            characterReader.Display();
+        }
 
-    public void AddCharacter()
-    {
-        // TODO: Implement adding a new character and saving to the CSV file
-    }
+        void FindCharacter()
+        {
+            CharacterReader characterReader = new CharacterReader();
+            characterReader.Find();
+        }
 
-    public void LevelUpCharacter()
-    {
-        // TODO: Implement leveling up a character and updating the CSV file
+        public void AddCharacter()
+        {
+            CharacterWriter characterWriter = new CharacterWriter();
+            characterWriter.Add();
+        }
+
+        public void LevelUpCharacter()
+        {
+            CharacterWriter characterWriter = new CharacterWriter();
+            characterWriter.LevelUp();
+        }
     }
 }
